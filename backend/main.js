@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import { createUserController } from "./src/controllers/usersController.js"
+import { createUserController,loginController,validarJWT } from "./src/controllers/usersController.js"
 
 const app = express();
 
@@ -11,3 +11,7 @@ app.use(express.json());
 app.listen(3000, console.log("SERVER ON http://localhost:3000"));
 
 app.post("/usuarios",createUserController);
+
+app.post("/login",loginController)
+
+app.get("/usuarios",validarJWT)
