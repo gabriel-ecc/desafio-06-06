@@ -37,15 +37,12 @@ export const loginController = async (req, res) => {
   }
 };
 
-export const validarJWT = async (req, res) => {
+export const getDatabyMailController = async (req, res) => {
   try {
-    const Authorization = req.header("Authorization");
-    const token = Authorization.split("Bearer ")[1];
-    jwt.verify(token, process.env.JWT_SECRET);
-    req.user = payload;
-    next();
+    const data = await getUserByEmail(req.user.email);
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
-    return res.status(401).send({ error: "Invalid token" });
+    res.status(500).json({ error: error.message });
   }
 };

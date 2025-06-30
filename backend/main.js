@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 
-import { createUserController,loginController,validarJWT } from "./src/controllers/usersController.js"
+import { createUserController,loginController,getDatabyMailController } from "./src/controllers/usersController.js"
+import { authMiddleware } from "./src/middlewares/auth.middleware.js";
+
 
 const app = express();
 
@@ -14,4 +16,4 @@ app.post("/usuarios",createUserController);
 
 app.post("/login",loginController)
 
-app.get("/usuarios",validarJWT)
+app.get("/usuarios",authMiddleware,getDatabyMailController)
