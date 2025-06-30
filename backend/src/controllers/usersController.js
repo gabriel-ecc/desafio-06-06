@@ -17,20 +17,16 @@ export const createUserController = async (req, res) => {
 
 export const loginController = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await getUserByEmail(email);
-    const isMatch = bcript.compareSync(password, user.password);
+    const user = await getUserByEmail(req.body.email);
+    const isMatch = bcript.compareSync(req.body.password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
     const payload = {
-      email,
+      email: req.body.email,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET);
-    return res.status(200).json({
-      message: "Login successfully",
-      token,
-    });
+    res.json({ token });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
@@ -40,7 +36,7 @@ export const loginController = async (req, res) => {
 export const getDatabyMailController = async (req, res) => {
   try {
     const data = await getUserByEmail(req.user.email);
-    res.status(200).json(data);
+    res.status(200).json([data]);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
